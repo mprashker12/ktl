@@ -6,7 +6,13 @@ on:
       
 jobs:
   integration:
-    runs_on: ubuntu-latest
+    runs-on: ubuntu-latest
+    strategy:
+        # Prevent GitHub from cancelling all in-progress jobs when a matrix job fails.
+        fail-fast: false
+        matrix:
+          # Run these tests against older clusters as well
+          k8s: [v1.25, latest]
     steps:
       - uses: actions/checkout@v3
       - uses: dtolnay/rust-toolchain@stable
