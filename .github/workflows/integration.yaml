@@ -1,8 +1,11 @@
 name: Integration
-on: [push]
-
+on:
+  push: 
+    branches:
+      - "main"
+      
 jobs:
-  build:
+  integration:
     runs_on: ubuntu-latest
     strategy:
         # Prevent GitHub from cancelling all in-progress jobs when a matrix job fails.
