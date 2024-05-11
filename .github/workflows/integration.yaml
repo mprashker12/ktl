@@ -5,7 +5,7 @@ on:
       - "main"
       
 jobs:
-  integration:
+  - integration:
     runs_on: ubuntu-latest
     strategy:
         # Prevent GitHub from cancelling all in-progress jobs when a matrix job fails.
