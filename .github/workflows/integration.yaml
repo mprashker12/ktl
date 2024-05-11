@@ -1,0 +1,31 @@
+name: Integration
+on:
+  push: 
+    branches:
+      - "main"
+      
+jobs:
+  build:
+    runs_on: ubuntu-latest
+    strategy:
+        # Prevent GitHub from cancelling all in-progress jobs when a matrix job fails.
+        fail-fast: false
+        matrix:
+          # Run these tests against older clusters as well
+          k8s: [v1.25, latest]
+      steps:
+        - uses: actions/checkout@v3
+        - uses: dtolnay/rust-toolchain@stable
+        - uses: Swatinem/rust-cache@v2
+        - uses: nolar/setup-k3d-k3s@v1
+          with:
+            version: ${{matrix.k8s}}
+            k3d-name: kube
+            # Used to avoid rate limits when fetching the releases from k3s repo.
+            # Anonymous access is limited to 60 requests / hour / worker
+            # github-token: ${{ secrets.GITHUB_TOKEN }}
+            k3d-args: "--no-lb --no-rollback --k3s-arg --disable=traefik,servicelb,metrics-server@server:*"
+
+        # Real CI work starts here
+        - name: Build workspace
+          run: cd morph_ctrl && cargo build
