@@ -6,4 +6,4 @@ k8s controller
 
 # Build
 
-```docker build ctrl```
+```docker build morhp_ctrl```
